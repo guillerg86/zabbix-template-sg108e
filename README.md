@@ -28,43 +28,43 @@ There's a discovery rule for detect network ports. When executed, it returns a j
     "interfaces": [
         {
 			"{#JSON.INDEX}": 0,
-            "{#IFNUMBER}": 1,
-            "{#IFADMINSTATUS}": "1"
+			"{#IFNUMBER}": 1,
+			"{#IFADMINSTATUS}": "1"
         },
         {
 			"{#JSON.INDEX}": 1,
-            "{#IFNUMBER}": 2,
-            "{#IFADMINSTATUS}": "0"
+			"{#IFNUMBER}": 2,
+			"{#IFADMINSTATUS}": "0"
         },
         {
 			"{#JSON.INDEX}": 2,
-            "{#IFNUMBER}": 3,
-            "{#IFADMINSTATUS}": "0"
+			"{#IFNUMBER}": 3,
+			"{#IFADMINSTATUS}": "0"
         },
         {
 			"{#JSON.INDEX}": 3,
-            "{#IFNUMBER}": 4,
-            "{#IFADMINSTATUS}": "0"
+			"{#IFNUMBER}": 4,
+			"{#IFADMINSTATUS}": "0"
         },
         {
 			"{#JSON.INDEX}": 4,
-            "{#IFNUMBER}": 5,
-            "{#IFADMINSTATUS}": "1"
+			"{#IFNUMBER}": 5,
+			"{#IFADMINSTATUS}": "1"
         },
         {
 			"{#JSON.INDEX}": 5,
-            "{#IFNUMBER}": 6,
-            "{#IFADMINSTATUS}": "1"
+			"{#IFNUMBER}": 6,
+			"{#IFADMINSTATUS}": "1"
         },
         {
 			"{#JSON.INDEX}": 6,
-            "{#IFNUMBER}": 7,
-            "{#IFADMINSTATUS}": "1"
+			"{#IFNUMBER}": 7,
+			"{#IFADMINSTATUS}": "1"
         },
         {
 			"{#JSON.INDEX}": 7,
-            "{#IFNUMBER}": 8,
-            "{#IFADMINSTATUS}": "1"
+			"{#IFNUMBER}": 8,
+			"{#IFADMINSTATUS}": "1"
         }
     ]
 }
