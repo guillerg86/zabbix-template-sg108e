@@ -1,0 +1,477 @@
+zabbix_export:
+  version: '6.4'
+  template_groups:
+    - uuid: 36bff6c29af64692839d077febfc7079
+      name: 'Templates/Network devices'
+  templates:
+    - uuid: 08c0d66080ed4d898a8539b05e4f3ffd
+      template: 'Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy'
+      name: 'Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy'
+      description: |
+        Author: Guille Rodriguez
+        Website: https://github.com/guillerg86
+      groups:
+        - name: 'Templates/Network devices'
+      items:
+        - uuid: 051de8eceacc4c0f87631f2df8b35c6a
+          name: Firmware
+          type: DEPENDENT
+          key: tplink.switch.sysinfo.firmware
+          delay: '0'
+          history: 30d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.firmware
+          master_item:
+            key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+          tags:
+            - tag: Application
+              value: General
+          triggers:
+            - uuid: b7b2a85e4669436b97055366042e06d7
+              expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.sysinfo.firmware)<>0'
+              name: 'Firmware changed'
+              opdata: '{ITEM.LASTVALUE}'
+              priority: WARNING
+              description: 'Firmware has been changed'
+              manual_close: 'YES'
+        - uuid: a9a9d5ad081a4ed5b23c991663708f04
+          name: Hardware
+          type: DEPENDENT
+          key: tplink.switch.sysinfo.hardware
+          delay: '0'
+          history: 30d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.hardware
+          master_item:
+            key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+          tags:
+            - tag: Application
+              value: General
+          triggers:
+            - uuid: cd6e8dac4976497e8a3bf24d2455711a
+              expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.sysinfo.hardware)<>0'
+              name: 'Hardware changed'
+              opdata: '{ITEM.LASTVALUE}'
+              priority: AVERAGE
+              description: 'Hardware has been changed'
+              manual_close: 'YES'
+        - uuid: 7c090f59ad704d21a01dccc0a9a41d89
+          name: Hostname
+          type: DEPENDENT
+          key: tplink.switch.sysinfo.hostname
+          delay: '0'
+          history: 30d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.description
+          master_item:
+            key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+          tags:
+            - tag: Application
+              value: General
+          triggers:
+            - uuid: e12c8b8fcee14b4e981a547d31929849
+              expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.sysinfo.hostname)<>0'
+              name: 'Hostname changed'
+              opdata: '{ITEM.LASTVALUE}'
+              priority: INFO
+              description: 'Hostname has been changed'
+              manual_close: 'YES'
+        - uuid: fe8ed0f1beeb40a8a72cac0084178885
+          name: 'Mac Address'
+          type: DEPENDENT
+          key: tplink.switch.sysinfo.mac_address
+          delay: '0'
+          history: 30d
+          trends: '0'
+          value_type: CHAR
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.mac_address
+          master_item:
+            key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+          tags:
+            - tag: Application
+              value: General
+          triggers:
+            - uuid: 53c708bcaa794d20bcf4d2d2c380af42
+              expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.sysinfo.mac_address)<>0'
+              name: 'MAC address changed'
+              opdata: '{ITEM.LASTVALUE}'
+              priority: AVERAGE
+              description: 'MAC address has been changed'
+              manual_close: 'YES'
+        - uuid: cc1ea5d94dae4f498498e2105eb3baca
+          name: 'Raw data'
+          type: EXTERNAL
+          key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+          delay: 3m
+          history: '0'
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            - type: DISCARD_UNCHANGED_HEARTBEAT
+              parameters:
+                - 1h
+          tags:
+            - tag: Application
+              value: General
+      discovery_rules:
+        - uuid: 7d001601a7a8429c9ea0163fd5eaee22
+          name: 'Interfaces discovery'
+          type: EXTERNAL
+          key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,discovery]'
+          delay: 30m
+          filter:
+            evaltype: AND
+            conditions:
+              - macro: '{#IFADMINSTATUS}'
+                value: '{$NET.IF.IFADMINSTATUS.MATCHES}'
+                formulaid: A
+              - macro: '{#IFADMINSTATUS}'
+                value: '{$NET.IF.IFADMINSTATUS.NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          lifetime: 2d
+          description: 'Discovering network interfaces'
+          item_prototypes:
+            - uuid: ac651fee43a34f73b8cd05ac68e3390a
+              name: 'Interface #{#IFNUMBER}: Admin status'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.admin_status[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: 'Administrative status of the port'
+              valuemap:
+                name: EnabledDisabled
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].admin_status'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: 34c4920b469c406797514db41481584e
+              name: 'Interface #{#IFNUMBER}: Flow control actual'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.flowcontrol_actual[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: |
+                Flow control actual on port
+                
+                0 - Disabled
+                1 - Enabled
+              valuemap:
+                name: EnabledDisabled
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].flowcontrol_config'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: 37d566a51c3d45c48888d2eafbe0f8f9
+              name: 'Interface #{#IFNUMBER}: Flow control configuration'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.flowcontrol_config[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: |
+                Flow control configured
+                
+                0 - Disabled
+                1 - Enabled
+              valuemap:
+                name: EnabledDisabled
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].flowcontrol_config'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+              trigger_prototypes:
+                - uuid: df146152c9c245389c0b86e346c6dbf3
+                  expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.flowcontrol_config[{#IFNUMBER}])<>0'
+                  recovery_mode: NONE
+                  name: 'Interface #{#IFNUMBER}: Flow control configuration changed'
+                  opdata: '{ITEM.LASTVALUE}'
+                  priority: AVERAGE
+                  description: 'Flow control configuration on port changed (admin changes)'
+                  manual_close: 'YES'
+            - uuid: c2498864961e45149baac15c83ead187
+              name: 'Interface #{#IFNUMBER}: Operational status'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.operation_status[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: 'Operational status of the port'
+              valuemap:
+                name: 'Operational status'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].operation_status'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: 23c0a2494fc54de3bc8e1e7692845510
+              name: 'Interface #{#IFNUMBER}: Received packets'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.received_packets[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: 'Received packets on port'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].received_packets'
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: 3f8dd1b1788145f3bdb2903b1556d7a7
+              name: 'Interface #{#IFNUMBER}: Received packets error'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.received_packets_error[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: 'Received packets error on port'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].received_packets_error'
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: 47580157b4fe4cfca9e596ecc93c64cc
+              name: 'Interface #{#IFNUMBER}: Speed actual'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.speed_actual[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: |
+                Speed config of the port
+                
+                1 - Auto
+                2 - 10MH
+                3 - 10MF
+                4 - 100MH
+                5 - 100MF
+                6 - 1000MF
+              valuemap:
+                name: InterfaceSpeedConfiguration
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].speed_actual'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: f410171f6c004524a07e841c653f6f0c
+              name: 'Interface #{#IFNUMBER}: Speed'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.speed_bps[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              units: bps
+              description: 'Speed on port'
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].speed_bps'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+              trigger_prototypes:
+                - uuid: 89b84f5777574706bf69fed0ee5c933b
+                  expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.speed_bps[{#IFNUMBER}])<0 and last(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.speed_bps[{#IFNUMBER}])>0'
+                  recovery_mode: NONE
+                  name: 'Interface #{#IFNUMBER}: Link speed is lower than before'
+                  priority: WARNING
+                  description: 'Device connected is slower than before (maybe connected other device, or just change port on configuration)'
+                  manual_close: 'YES'
+                  dependencies:
+                    - name: 'Interface #{#IFNUMBER}: Speed configuration changed'
+                      expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.speed_config[{#IFNUMBER}])<>0'
+            - uuid: cf22c03ae89945f4861293c9f674f6b9
+              name: 'Interface #{#IFNUMBER}: Speed configuration'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.speed_config[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: |
+                Speed config of the port
+                
+                1 - Auto
+                2 - 10MH
+                3 - 10MF
+                4 - 100MH
+                5 - 100MF
+                6 - 1000MF
+              valuemap:
+                name: InterfaceSpeedConfiguration
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].speed_config'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+              trigger_prototypes:
+                - uuid: 33ab64ee8eeb4eceb6b058ef864ab4f0
+                  expression: 'change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.speed_config[{#IFNUMBER}])<>0'
+                  recovery_mode: NONE
+                  name: 'Interface #{#IFNUMBER}: Speed configuration changed'
+                  opdata: '{ITEM.LASTVALUE}'
+                  priority: AVERAGE
+                  description: 'Speed configuration on port changed (admin changes)'
+                  manual_close: 'YES'
+            - uuid: 1a215ee9db5a4ac1a3c3a178e13d0307
+              name: 'Interface #{#IFNUMBER}: Transmitted packets'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.transmitted_packets[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].transmitted_packets'
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: 7a81d3bf29c1476fb3f998ea21832764
+              name: 'Interface #{#IFNUMBER}: Transmitted packets error'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.transmitted_packets_error[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].transmitted_packets_error'
+                - type: SIMPLE_CHANGE
+                  parameters:
+                    - ''
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+            - uuid: f8e92aee91b444c896add3ef344e321d
+              name: 'Interface #{#IFNUMBER}: Trunk status'
+              type: DEPENDENT
+              key: 'tplink.switch.if.info.port.trunk_status[{#IFNUMBER}]'
+              delay: '0'
+              history: 14d
+              description: 'Trunk status of the port'
+              valuemap:
+                name: EnabledDisabled
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$.ports[{#JSON.INDEX}].trunk_status'
+              master_item:
+                key: 'tplinkswitch2zabbix.py[-i,{$SW.IP},-u,{$SW.USER},-p,{$SW.PASS},-a,allinfo]'
+              tags:
+                - tag: Application
+                  value: 'Interface-{#IFNUMBER}'
+          trigger_prototypes:
+            - uuid: 40e64dea8eca4835b5ab23fd486955db
+              expression: 'last(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.operation_status[{#IFNUMBER}])=0 and last(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.admin_status[{#IFNUMBER}])=1 and change(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.operation_status[{#IFNUMBER}])<>0'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.operation_status[{#IFNUMBER}])=1 or last(/Template TP-LINK SG108E WebParsing by Zabbix Server or Proxy/tplink.switch.if.info.port.admin_status[{#IFNUMBER}])=0'
+              name: 'Interface #{#IFNUMBER}: Link down'
+              priority: WARNING
+              description: 'Interface Admin status is enabled but nothing is connected. Trigger will only appear once. If trigger is manually closed, doesn''t appear until it''s connected and disconnected again.'
+              manual_close: 'YES'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - $.interfaces
+      macros:
+        - macro: '{$NET.IF.IFADMINSTATUS.MATCHES}'
+          value: '^.*$'
+        - macro: '{$NET.IF.IFADMINSTATUS.NOT_MATCHES}'
+          value: '0'
+          description: 'Admin status of interface'
+        - macro: '{$SW.IP}'
+          description: 'IP Address of the Switch'
+        - macro: '{$SW.PASS}'
+          description: 'Web Password'
+        - macro: '{$SW.USER}'
+          value: admin
+          description: 'Web Username'
+      valuemaps:
+        - uuid: b84692c68efd4f04850fb55ae1fe7516
+          name: EnabledDisabled
+          mappings:
+            - value: '0'
+              newvalue: Disabled
+            - value: '1'
+              newvalue: Enabled
+        - uuid: 574599c4fd1e493ba2b6311b80ad51d9
+          name: InterfaceSpeedConfiguration
+          mappings:
+            - value: '0'
+              newvalue: 'Link down'
+            - value: '1'
+              newvalue: Auto
+            - value: '2'
+              newvalue: '10 Mbps Half Duplex'
+            - value: '3'
+              newvalue: '10 Mbps Full Duplex'
+            - value: '4'
+              newvalue: '100 Mbps Half Duplex'
+            - value: '5'
+              newvalue: '100 Mbps Full Duplex'
+            - value: '6'
+              newvalue: '1000 Mbps Full Duplex'
+        - uuid: 5969771d654e44f99b20041b74dd1f69
+          name: 'Operational status'
+          mappings:
+            - value: '0'
+              newvalue: down
+            - value: '1'
+              newvalue: up
