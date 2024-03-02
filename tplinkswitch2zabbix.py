@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #######################################################################################
 # @author: Guille Rodriguez https://github.com/guillerg86
-# @version: 2023-12-18 01:30
+# @version: 2024-03-02 20:55
 # @python-version: 3.x
 #
 # Script for monitor with Zabbix device like TL-SG108E (which doesn't have SNMP)
@@ -53,6 +53,7 @@ class DAOSwitchTPLink():
         self.ip_address = None
         self.username = None
         self.password = None
+        self.login_response_code = 200
 
     def get_switch(self):
         return self.switch
@@ -69,7 +70,7 @@ class DAOSwitchTPLink():
         }
         session = requests.Session()
         resp = session.post(url_login, data=data)
-        if resp.status_code in [200,401]:
+        if resp.status_code == self.login_response_code:
             return session
         else:
             raise Exception(f"Error: HTTP Status code: {str(resp.status_code)}")
@@ -145,6 +146,16 @@ class DAOSwitchTPLink():
             self.switch.ports[i].received_packets = packets_info[i*4+2]
             self.switch.ports[i].received_packets_error = packets_info[i*4+3]
 
+class DAOSwitchTPLink_v3(DAOSwitchTPLink):
+    def __init__(self):
+        super().__init__()
+        self.login_response_code = 401
+
+class DAOSwitchTPLink_v6(DAOSwitchTPLink):
+    def __init__(self):
+        super().__init__()
+        self.login_response_code = 200
+
 
 def configure_parser():
     """
@@ -162,13 +173,19 @@ def configure_parser():
     parser.add_argument('-u', '--username', required=True)
     parser.add_argument('-p', '--password', required=True)
     parser.add_argument('--port-number',required=False, type=int, default=-1)
+    parser.add_argument('-hv','--hardware-version', required=False, type=int, default=6)
     args = parser.parse_args()
     args.action = args.action.lower()
     return args
 
+def get_dao_version(version):
+    if version == 3:
+       return DAOSwitchTPLink_v3()
+    return DAOSwitchTPLink_v6()
+
 if __name__ == '__main__':
     args = configure_parser()
-    dao = DAOSwitchTPLink()
+    dao = get_dao_version(args.hardware_version)
 
     dao.ip_address = args.ip_address
     dao.username = args.username

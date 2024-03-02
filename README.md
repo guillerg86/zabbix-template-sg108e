@@ -99,6 +99,20 @@ Only creates Item prototypes when {#IFADMINSTATUS} = 1 (enabled)
 - TP-Link SG108E v6.0 
   - Firmware: 20230218 ✔
   - Firmware: 20201208 ✔
+- TP-Link SG108E v3.0
+  - Firmware: 20171214 ✔
+  
+  
+## Parameters
+
+|SHORT PARAM|LONG PARAM|REQUIRED|VALUES|DEFAULT VALUE|DESCRIPTION|
+|-|-|-|-|-|-|
+|-i|--ip-address|Yes|||IP address of the switch (ex: 192.168.0.1)|
+|-u|--username|Yes|||Username for web login|
+|-p|--password|Yes|||Password for web login|
+|-a|--action|Yes|`allinfo`<br>`sysinfo`<br>`discovery`<br>`portinfo` -> requires port-number param||Script will get some info depending of action selected|
+|-hv|--hardware-version|No|`3`<br>`6`|`6`|Support for some changes on TPLink Hardware Versions|
+  
 
 ## Test script before install on Zabbix
 
@@ -324,4 +338,8 @@ This switch only allows some concurrent sessions on web management, so when this
 
 - Install TP-Link Easy Smart Configuration Utility (you can manage switch without getting disconnected)
 - Stop monitoring this switch while you are configuring the switch via web.
+
+
+
+
 
