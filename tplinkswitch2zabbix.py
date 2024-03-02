@@ -69,7 +69,7 @@ class DAOSwitchTPLink():
         }
         session = requests.Session()
         resp = session.post(url_login, data=data)
-        if resp.status_code == 200:
+        if resp.status_code in [200,401]:
             return session
         else:
             raise Exception(f"Error: HTTP Status code: {str(resp.status_code)}")
