@@ -99,8 +99,10 @@ Only creates Item prototypes when {#IFADMINSTATUS} = 1 (enabled)
 - TP-Link SG108E v6.0 
   - Firmware: 20230218 ✔
   - Firmware: 20201208 ✔
+- TP-Link SG105E v4.0
+  - Firmware: 20180720 ✔(thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
 - TP-Link SG108E v3.0
-  - Firmware: 20171214 ✔
+  - Firmware: 20171214 ✔(thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
   
   
 ## Parameters
@@ -112,6 +114,7 @@ Only creates Item prototypes when {#IFADMINSTATUS} = 1 (enabled)
 |-p|--password|Yes|||Password for web login|
 |-a|--action|Yes|`allinfo`<br>`sysinfo`<br>`discovery`<br>`portinfo` -> requires port-number param||Script will get some info depending of action selected|
 |-hv|--hardware-version|No|`3`<br>`6`|`6`|Support for some changes on TPLink Hardware Versions|
+||--port-number|Only with<br>action `portinfo`|Number of port (1-maxport)|-1|Return info only of the specified port|
   
 
 ## Test script before install on Zabbix
@@ -341,5 +344,7 @@ This switch only allows some concurrent sessions on web management, so when this
 
 
 
+## Greetings
 
+- <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>: tested on SG108E v3, SG105E v4
 

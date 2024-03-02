@@ -151,7 +151,10 @@ class DAOSwitchTPLink_v3(DAOSwitchTPLink):
     def __init__(self):
         super().__init__()
         self.login_response_code = 401
-
+class DAOSwitchTPLink_v4(DAOSwitchTPLink):
+    def __init__(self):
+        super().__init__()
+        self.login_response_code = 401
 class DAOSwitchTPLink_v6(DAOSwitchTPLink):
     def __init__(self):
         super().__init__()
@@ -181,7 +184,9 @@ def configure_parser():
 
 def get_dao_version(version):
     if version == 3:
-       return DAOSwitchTPLink_v3()
+        return DAOSwitchTPLink_v3()
+    if version == 4:
+        return DAOSwitchTPLink_v4()
     return DAOSwitchTPLink_v6()
 
 if __name__ == '__main__':
