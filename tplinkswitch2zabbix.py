@@ -10,6 +10,7 @@
 #
 # Tested on:
 # - TL-SG108E v6.0 with 20201208 and 20230218 firmware
+# - TL-SG108E v3.0 with 20171214 firmware
 #######################################################################################
 import json
 import re
@@ -154,7 +155,7 @@ class DAOSwitchTPLink_v3(DAOSwitchTPLink):
 class DAOSwitchTPLink_v6(DAOSwitchTPLink):
     def __init__(self):
         super().__init__()
-        self.login_response_code = 200
+
 
 
 def configure_parser():
