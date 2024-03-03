@@ -113,7 +113,7 @@ Only creates Item prototypes when {#IFADMINSTATUS} = 1 (enabled)
 |-u|--username|Yes|||Username for web login|
 |-p|--password|Yes|||Password for web login|
 |-a|--action|Yes|`allinfo`<br>`sysinfo`<br>`discovery`<br>`portinfo` -> requires port-number param||Script will get some info depending of action selected|
-|-hv|--hardware-version|No|`3`<br>`6`|`6`|Support for some changes on TPLink Hardware Versions|
+|-hv|--hardware-version|No|`3`<br>`4`<br>`6`|`6`|Support for some changes on TPLink Hardware Versions|
 ||--port-number|Only with<br>action `portinfo`|Number of port (1-maxport)|-1|Return info only of the specified port|
   
 

@@ -10,7 +10,9 @@
 #
 # Tested on:
 # - TL-SG108E v6.0 with 20201208 and 20230218 firmware
+# - TL-SG105E v4.0 with 20180720 firmware
 # - TL-SG108E v3.0 with 20171214 firmware
+#
 #######################################################################################
 import json
 import re
@@ -78,7 +80,7 @@ class DAOSwitchTPLink():
     def load_sysinfo(self, session):
         response = session.get(self.get_base_url() + "SystemInfoRpm.htm")
 
-        pattern_rawdata = re.compile(r"var info_ds = ({\n?(.*?)\n?});$", re.MULTILINE | re.DOTALL)
+        pattern_rawdata = re.compile(r"var info_ds = ({\n?(.*)\n?});$", re.MULTILINE | re.DOTALL)
         data = pattern_rawdata.search(response.text)
         raw_data = data.group(1).replace("\n", "")
 
