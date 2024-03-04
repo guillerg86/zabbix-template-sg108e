@@ -10,7 +10,8 @@
 #
 # Tested on:
 # - TL-SG108E v6.0 with 20201208 and 20230218 firmware
-# - TL-SG105E v4.0 with 20180720 firmware
+# - TL-SG108E v5.0 with 20191021 firmware
+# - TL-SG105E/TL-SG108E v4.0 with 20180720 and 20181120 firmware
 # - TL-SG108E v3.0 with 20171214 firmware
 #
 #######################################################################################
@@ -187,8 +188,9 @@ def configure_parser():
 def get_dao_version(version):
     if version == 3:
         return DAOSwitchTPLink_v3()
-    if version == 4:
+    if version <= 4:
         return DAOSwitchTPLink_v4()
+    ## Version 5 and 6 , works equal at this time
     return DAOSwitchTPLink_v6()
 
 if __name__ == '__main__':

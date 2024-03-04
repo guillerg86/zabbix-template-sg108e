@@ -1,6 +1,6 @@
-## Template TP-Link SG108E
+## Template TP-Link SG105E / SG108E
 
-This template allows to monitor TP-Link SG108E switch. This switch is a home switch, so doesn't have SNMP or SSH, just a website.
+This template allows to monitor TP-Link SG105E / SG108E switch. This switch is a home switch, so doesn't have SNMP or SSH, just a website.
 
 Check images folder for examples
 
@@ -99,10 +99,13 @@ Only creates Item prototypes when {#IFADMINSTATUS} = 1 (enabled)
 - TP-Link SG108E v6.0 
   - Firmware: 20230218 ✔
   - Firmware: 20201208 ✔
-- TP-Link SG105E v4.0
-  - Firmware: 20180720 ✔(thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
+- TP-Link SG108E v5.0 
+  - Firmware: 20191021 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
+- TP-Link SG105E / TL-SG108E v4.0
+  - Firmware: 20181120 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
+  - Firmware: 20180720 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
 - TP-Link SG108E v3.0
-  - Firmware: 20171214 ✔(thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
+  - Firmware: 20171214 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
   
   
 ## Parameters
@@ -113,7 +116,7 @@ Only creates Item prototypes when {#IFADMINSTATUS} = 1 (enabled)
 |-u|--username|Yes|||Username for web login|
 |-p|--password|Yes|||Password for web login|
 |-a|--action|Yes|`allinfo`<br>`sysinfo`<br>`discovery`<br>`portinfo` -> requires port-number param||Script will get some info depending of action selected|
-|-hv|--hardware-version|No|`3`<br>`4`<br>`6`|`6`|Support for some changes on TPLink Hardware Versions|
+|-hv|--hardware-version|No|`3`<br>`4`<br>`5`<br>`6`|`6`|Support for some changes on TPLink Hardware Versions|
 ||--port-number|Only with<br>action `portinfo`|Number of port (1-maxport)|-1|Return info only of the specified port|
   
 
@@ -342,9 +345,13 @@ This switch only allows some concurrent sessions on web management, so when this
 - Install TP-Link Easy Smart Configuration Utility (you can manage switch without getting disconnected)
 - Stop monitoring this switch while you are configuring the switch via web.
 
+### HTTP 401 after login
+
+- Hardware versions 4 and older return HTTP 401 on sucessful login process. 
+- Hardware versions 5 and newer return HTTP 200 on sucessful login process.
 
 
 ## Greetings
 
-- <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>: tested on SG108E v3, SG105E v4
+- <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>: tested on SG108E v3, SG105E/SG108E v4, SG108E v5
 
