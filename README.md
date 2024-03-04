@@ -103,9 +103,9 @@ Only creates Item prototypes when {#IFADMINSTATUS} = 1 (enabled)
   - Firmware: 20191021 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
 - TP-Link SG105E / TL-SG108E v4.0
   - Firmware: 20181120 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
-  - Firmware: 20180720 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
+  - Firmware: 20180720 (with -hv 4 parameter) ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
 - TP-Link SG108E v3.0
-  - Firmware: 20171214 ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
+  - Firmware: 20171214 (with -hv 3 parameter) ✔ (thanks to <a href="https://github.com/jeffersonraimon" target="_blank">@jeffersonraimon</a>)
   
   
 ## Parameters
@@ -348,7 +348,7 @@ This switch only allows some concurrent sessions on web management, so when this
 ### HTTP 401 after login
 
 - Hardware versions 4 and older return HTTP 401 on sucessful login process. 
-- Hardware versions 5 and newer return HTTP 200 on sucessful login process.
+- Hardware versions 4 with firmware 20181120 and newer return HTTP 200 on sucessful login process.
 
 
 ## Greetings
