@@ -1,5 +1,5 @@
 zabbix_export:
-  version: '6.4'
+  version: '7.0'
   template_groups:
     - uuid: 36bff6c29af64692839d077febfc7079
       name: 'Templates/Network devices'
@@ -18,6 +18,7 @@ zabbix_export:
           type: DEPENDENT
           key: tplink.switch.sysinfo.firmware
           delay: '0'
+          history: 90d
           trends: '0'
           value_type: CHAR
           preprocessing:
@@ -25,7 +26,7 @@ zabbix_export:
               parameters:
                 - $.firmware
           master_item:
-            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS}]'
+            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS},-hv,{$SW.HARDVERSION}]'
           tags:
             - tag: Application
               value: General
@@ -42,6 +43,7 @@ zabbix_export:
           type: DEPENDENT
           key: tplink.switch.sysinfo.hardware
           delay: '0'
+          history: 90d
           trends: '0'
           value_type: CHAR
           preprocessing:
@@ -49,7 +51,7 @@ zabbix_export:
               parameters:
                 - $.hardware
           master_item:
-            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS}]'
+            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS},-hv,{$SW.HARDVERSION}]'
           tags:
             - tag: Application
               value: General
@@ -66,6 +68,7 @@ zabbix_export:
           type: DEPENDENT
           key: tplink.switch.sysinfo.hostname
           delay: '0'
+          history: 90d
           trends: '0'
           value_type: CHAR
           preprocessing:
@@ -73,7 +76,7 @@ zabbix_export:
               parameters:
                 - $.description
           master_item:
-            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS}]'
+            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS},-hv,{$SW.HARDVERSION}]'
           tags:
             - tag: Application
               value: General
@@ -90,6 +93,7 @@ zabbix_export:
           type: DEPENDENT
           key: tplink.switch.sysinfo.mac_address
           delay: '0'
+          history: 90d
           trends: '0'
           value_type: CHAR
           preprocessing:
@@ -97,7 +101,7 @@ zabbix_export:
               parameters:
                 - $.mac_address
           master_item:
-            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS}]'
+            key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS},-hv,{$SW.HARDVERSION}]'
           tags:
             - tag: Application
               value: General
@@ -111,7 +115,7 @@ zabbix_export:
               manual_close: 'YES'
         - uuid: 19f4634336f045e2ba00190cd968dd37
           name: 'System Info Raw Data'
-          key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS}]'
+          key: 'tplink.switch.sysinfo[{$SW.IP},{$SW.USER},{$SW.PASS},-hv,{$SW.HARDVERSION}]'
           delay: 1h
           history: '0'
           trends: '0'
@@ -126,7 +130,7 @@ zabbix_export:
       discovery_rules:
         - uuid: 78912c85ccb44cbbbca579bde47b432e
           name: 'Interfaces discovery'
-          key: 'tplink.switch.if.discovery[{$SW.IP},{$SW.USER},{$SW.PASS}]'
+          key: 'tplink.switch.if.discovery[{$SW.IP},{$SW.USER},{$SW.PASS},-hv,{$SW.HARDVERSION}]'
           delay: 30m
           filter:
             evaltype: AND
@@ -139,6 +143,7 @@ zabbix_export:
                 operator: NOT_MATCHES_REGEX
                 formulaid: B
           lifetime: 2d
+          enabled_lifetime_type: DISABLE_NEVER
           description: 'Discovering network interfaces'
           item_prototypes:
             - uuid: 5d6f719d6e3a423483d35f65b610a390
@@ -443,6 +448,8 @@ zabbix_export:
         - macro: '{$NET.IF.IFADMINSTATUS.NOT_MATCHES}'
           value: '0'
           description: 'Admin status of interface'
+        - macro: '{$SW.HARDVERSION}'
+          value: '6'
         - macro: '{$SW.IP}'
           description: 'IP Address of the Switch'
         - macro: '{$SW.PASS}'
