@@ -272,6 +272,7 @@ You can monitor this switch using agent or server/proxy (external script).
 |{$SW.IP}|IP ADDRESS of the Switch|
 |{$SW.USER}|Switch Webadmin user|
 |{$SW.PASS}|Switch Webadmin password|
+|{$SW.HARDVERSION}|Switch hardware version (default 6)|
 
 ### By Zabbix agent
 
