@@ -4,6 +4,9 @@ This template allows to monitor TP-Link SG105E / SG108E switch. This switch is a
 
 Check images folder for examples
 
+### Requeriments
+
+requests (use pip install request)
 
 ### Items
 
